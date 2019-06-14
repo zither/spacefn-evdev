@@ -203,13 +203,18 @@ static void state_decide(void) {    // {{{2
             return;
         }
 
-        // 在该状态下按下并弹起的所有按键都以正常键处理
-        if (ev.value == V_RELEASE) {
-            if (buffer_contains(ev.code)) {
-                buffer_remove(ev.code);
-            }
+        // 空格键按下前按下的键被释放，不做映射处理
+        if (ev.value == V_RELEASE && !buffer_contains(ev.code)) {
             send_key(ev.code, ev.value);
             continue;
+        }
+
+        // 空格键按下后按下的键，在超时前被松开
+        if (ev.value == V_RELEASE && buffer_remove(ev.code)) {
+            send_mapped_key(ev.code, V_PRESS);
+            send_mapped_key(ev.code, V_RELEASE);
+            state = SHIFT;
+            return;
         }
     }
 
