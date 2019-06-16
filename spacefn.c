@@ -223,6 +223,7 @@ static void state_decide(void) {    // {{{2
         // 查找按键映射，如果未映射，将原键发出
         // 超时之前未弹起的按键都视为映射键
         send_mapped_key(buffer[i], V_PRESS);
+        send_mapped_key(buffer[i], V_RELEASE);
     }
 
     // 正式进入 FN 状态
@@ -239,7 +240,7 @@ static void state_shift(void) {
         if (ev.code == KEY_SPACE && ev.value == V_RELEASE) {
             // 遍历 buffer 中的按键，依次发从弹起事件
             for (int i=0; i<n_buffer; i++) {
-                send_key(buffer[i], V_RELEASE);
+                send_mapped_key(buffer[i], V_RELEASE);
             }
             // 重新进入 IDLE 状态
             state = IDLE;
@@ -250,10 +251,11 @@ static void state_shift(void) {
 
         int mapped_code = send_mapped_key(ev.code, ev.value);
         if (mapped_code) {
+            // 由于增加了多键映射的缘故，这里必须保存原键才能保证信息不丢失
             if (ev.value == V_PRESS) {
-                buffer_append(mapped_code);
+                buffer_append(ev.code);
             } else if (ev.value == V_RELEASE) {
-                buffer_remove(mapped_code);
+                buffer_remove(ev.code);
             }
         }
     }
