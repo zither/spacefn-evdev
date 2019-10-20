@@ -223,7 +223,7 @@ static void state_decide(void) {    // {{{2
         // 查找按键映射，如果未映射，将原键发出
         // 超时之前未弹起的按键都视为映射键
         send_mapped_key(buffer[i], V_PRESS);
-        send_mapped_key(buffer[i], V_RELEASE);
+        //send_mapped_key(buffer[i], V_RELEASE);
     }
 
     // 正式进入 FN 状态
