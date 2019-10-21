@@ -1,2 +1,14 @@
 spacefn
+spacefn.*
 *.cfg
+*.m4
+autom4te.cache/
+Makefile.in
+.deps/
+config.log
+config.status
+depcomp
+install-sh
+missing
+compile
+configure.scan
