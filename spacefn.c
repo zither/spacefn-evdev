@@ -142,6 +142,7 @@ static int read_one_key(struct input_event *ev) {
         exit(1);
     }
     if (ev->type != EV_KEY) {
+        libevdev_uinput_write_event(odev, ev->type, ev->code, ev->value);
         return -1;
     }
     // 取消原作者的退出快捷键
@@ -178,7 +179,7 @@ static void state_decide(void) {    // {{{2
     while (timeout.tv_usec >= 0) {
         FD_SET(fd, &set);
         // 等待空格键之后的按键
-        int nfds = select(fd+1, &set, NULL, &set, &timeout);
+        int nfds = select(fd+1, &set, NULL, NULL, &timeout);
         // 指定时间内为获得新的按键，进入超时处理逻辑
         if (!nfds) {
             break;
