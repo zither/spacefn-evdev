@@ -13,6 +13,9 @@
 #include <unistd.h>
 #include <libconfig.h>
 
+// Debug flag
+#define DEBUG 0
+
 // Global device handles {{{1
 struct libevdev *idev;
 struct libevdev_uinput *odev;
@@ -153,6 +156,9 @@ static int read_one_key(struct input_event *ev) {
 }
 
 static void state_idle(void) {  // {{{2
+    if (DEBUG) {
+        printf("Enter IDLE\n");
+    }
     struct input_event ev;
     for (;;) {
         while (read_one_key(&ev));
@@ -168,6 +174,9 @@ static void state_idle(void) {  // {{{2
 
 /* 空格键被按下，进入中间状态，需要判断是长按空格还是短按，长按才进入 FN 状态 */
 static void state_decide(void) {    // {{{2
+    if (DEBUG) {
+        printf("Enter DECIDE\n");
+    }
     n_buffer = 0;
     struct input_event ev;
     struct timeval timeout;
@@ -233,7 +242,10 @@ static void state_decide(void) {    // {{{2
 
 /* 正式进入 FN 状态 */
 static void state_shift(void) {
-    n_buffer = 0;
+    if (DEBUG) {
+        printf("Enter SHIFT\n");
+    }
+    //n_buffer = 0;
     struct input_event ev;
     for (;;) {
         while (read_one_key(&ev));
