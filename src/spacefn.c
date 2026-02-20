@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <libconfig.h>
+#include <sys/stat.h>
+#include <pwd.h>
 
 // Debug flag
 #define DEBUG 0
@@ -292,10 +294,42 @@ static void run_state_machine(void) {
 
 
 int main(int argc, char **argv) {   // {{{1
-    // 检查运行参数
-    if (argc < 2) {
-        printf("usage: %s config.cfg...", argv[0]);
-        return 1;
+    char *config_path = NULL;
+
+    if (argc >= 2) {
+        config_path = argv[1];
+    } else {
+        struct passwd *pw = getpwuid(getuid());
+        char *home = pw ? pw->pw_dir : NULL;
+
+        static char user_config[1024];
+        static char local_config[1024];
+
+        if (home) {
+            snprintf(user_config, sizeof(user_config), "%s/.config/spacefn/default.cfg", home);
+        }
+
+        char *exe_path = argv[0];
+        char exe_dir[1024];
+        strncpy(exe_dir, exe_path, sizeof(exe_dir) - 1);
+        exe_dir[sizeof(exe_dir) - 1] = '\0';
+        char *last_slash = strrchr(exe_dir, '/');
+        if (last_slash) {
+            *last_slash = '\0';
+            snprintf(local_config, sizeof(local_config), "%s/configs/default.cfg", exe_dir);
+        }
+
+        if (home && access(user_config, R_OK) == 0) {
+            config_path = user_config;
+        } else if (access(local_config, R_OK) == 0) {
+            config_path = local_config;
+        } else {
+            printf("usage: %s [config.cfg]\n", argv[0]);
+            printf("\nConfig search order:\n");
+            printf("  1. ~/.config/spacefn/default.cfg\n");
+            printf("  2. <exe_dir>/configs/default.cfg\n");
+            return 1;
+        }
     }
 
     const config_setting_t *keys;
@@ -305,7 +339,7 @@ int main(int argc, char **argv) {   // {{{1
     cf = &cfg;
     config_init(cf);
 
-    if (!config_read_file(cf, argv[1])) {
+    if (!config_read_file(cf, config_path)) {
         fprintf(stderr, "read config file error %s:%d %s\n", config_error_file(cf), config_error_line(cf), config_error_text(cf)); 
         config_destroy(cf);
         return 1;
