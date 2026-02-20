@@ -32,12 +32,12 @@ fi
 echo
 echo "[2/3] 添加用户到 input 组..."
 TARGET_USER=${SUDO_USER:-$(whoami)}
-if groups "$TARGET_USER" | grep -qw input; then
+    if groups "$TARGET_USER" | grep -qw input; then
     echo "  用户 $TARGET_USER 已在 input 组中"
 else
     usermod -aG input "$TARGET_USER"
     echo "  已将 $TARGET_USER 添加到 input 组"
-    echo "  注意: 请重新登录以使组权限生效"
+    echo "  请重新打开终端或运行 'newgrp input' 使组权限生效"
 fi
 
 echo
@@ -55,4 +55,4 @@ echo "使用方式:"
 echo "  ./build.sh           # 编译程序"
 echo "  ./spacefn \$HOME/.config/spacefn/default.cfg_example  # 运行"
 echo
-echo "请重新登录后使用"
+echo "请重新打开终端后使用"
