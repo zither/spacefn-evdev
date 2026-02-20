@@ -27,26 +27,38 @@ You can also just run the program as root.
 ## Building
 
 ```
-./autogen.sh
-mkdir build && cd build
-../configure
-make
+./build.sh
 ```
 
-The compiled binary will be in the `build/` directory.
+The compiled binary will be at `./spacefn` (symlink to `build/spacefn`).
+
+## Installation
+
+```
+sudo ./install.sh
+```
+
+This will:
+1. Install udev rules for uinput and input device access
+2. Copy config examples to `~/.config/spacefn/`
+3. Show instructions for adding your user to the `input` group
+
+After installation, add your user to the `input` group and log out/in:
+```
+sudo usermod -aG input $USER
+```
 
 ## Running
 
-Find your keyboard in `/dev/input/`.
-The easiest way is to look in `/dev/input/by-id`;
-for example, my laptop keyboard is
-`/dev/input/usb-Apple_Inc._Apple_Internal_Keyboard___Trackpad_XXXXXXXXXXXXXXXXXXXX-if01-event-kbd`.
-
-Then run the program:
 ```
-./spacefn /dev/input/usb-Apple_Inc._Apple_Internal_Keyboard___Trackpad_XXXXXXXXXXXXXXXXXXXX-if01-event-kbd
+./spacefn ~/.config/spacefn/default.cfg
+```
+
+Find your keyboard device:
+```
+ls /dev/input/by-id/
 ```
 
 ## Customising
 
-The key map is in the function `key_map()`.
+Edit config files in `configs/` directory.

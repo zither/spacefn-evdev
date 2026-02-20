@@ -1,0 +1,10 @@
+# udev rules for spacefn-evdev
+# Copy this file to /etc/udev/rules.d/99-spacefn.rules
+# Then run: sudo udevadm control --reload-rules
+# Add your user to 'input' group: sudo usermod -aG input $USER
+
+# Allow access to uinput for creating virtual keyboard devices
+KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+
+# Allow read access to input devices
+KERNEL=="event*", SUBSYSTEM=="input", MODE="0644", GROUP="input"
