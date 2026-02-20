@@ -1,17 +1,31 @@
-spacefn
-spacefn.*
-*.cfg
-*.m4
+build/
+*.o
+*.a
+*.so
+*.so.*
+
+# Autotools
+aclocal.m4
 autom4te.cache/
+configure
 Makefile.in
-.deps/
-config.log
-config.status
+compile
+config.guess
+config.sub
 depcomp
 install-sh
 missing
-compile
-configure.scan
+ltmain.sh
+test-driver
+
+# Build artifacts
+config.log
+config.status
+Makefile
+.deps/
+*.loT
+
+# Editor
 .idea
 *~
-Makefile
+*.swp

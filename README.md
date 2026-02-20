@@ -24,9 +24,16 @@ You also need permission to read `/dev/input/eventXX`.
 On my system all the requisite permissions are granted by making myself a member of the `input` group.
 You can also just run the program as root.
 
-## Compiling
+## Building
 
-Run `make`.
+```
+./autogen.sh
+mkdir build && cd build
+../configure
+make
+```
+
+The compiled binary will be in the `build/` directory.
 
 ## Running
 
