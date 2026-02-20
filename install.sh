@@ -37,7 +37,7 @@ TARGET_USER=${SUDO_USER:-$(whoami)}
 else
     usermod -aG input "$TARGET_USER"
     echo "  已将 $TARGET_USER 添加到 input 组"
-    echo "  请重新打开终端或运行 'newgrp input' 使组权限生效"
+    echo "  请重新打开终端使组权限生效"
 fi
 
 echo
