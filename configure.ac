@@ -7,7 +7,7 @@ AM_INIT_AUTOMAKE([foreign])
 PKG_PROG_PKG_CONFIG
 EXTERNAL_CFLAGS="$CFLAGS"
 
-AC_CONFIG_SRCDIR([spacefn.c])
+AC_CONFIG_SRCDIR([src/spacefn.c])
 #AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
