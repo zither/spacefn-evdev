@@ -2,19 +2,20 @@
 
 set -e
 
-rm -rf build/* autom4te.cache
-rm -f aclocal.m4 autom4te.cache configure compile depcomp install-sh missing Makefile.in ltmain.sh test-driver configure~
-
-autoreconf -fi
-
+rm -rf build
 mkdir -p build
 
+mkdir -p build/m4
+cp configure.ac build/
+cp Makefile.am build/
+ln -s ../src build/src
+
 cd build
-ln -sf ../src src
-../configure
+aclocal -I m4
+autoconf
+automake --add-missing --copy --foreign
+./configure
 make
 cd ..
 
 ln -sf build/spacefn ./spacefn
-
-rm -rf autom4te.cache aclocal.m4 configure~ compile depcomp install-sh missing Makefile.in ltmain.sh test-driver
