@@ -13,3 +13,5 @@ missing
 compile
 configure.scan
 .idea
+*~
+Makefile
